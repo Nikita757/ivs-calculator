@@ -9,7 +9,8 @@ const (
 
 type Token struct {
 	tokenType int
-	value string
+	stringValue string
+	floatValue float64
 }
 
 type BinaryTree struct {
