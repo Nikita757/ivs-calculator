@@ -13,8 +13,8 @@ type Token struct {
 	floatValue float64
 }
 
-type BinaryTree struct {
+type TreeNode struct {
 	token Token
-	leftNode *BinaryTree
-	rightNode *BinaryTree
+	leftNode *TreeNode
+	rightNode *TreeNode
 }
