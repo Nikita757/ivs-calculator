@@ -1,3 +1,3 @@
-package interpeter
+package interpreter
 
 import "testing"
