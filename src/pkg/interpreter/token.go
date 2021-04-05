@@ -1,6 +1,4 @@
-package interpeter
-
-import "fmt"
+package interpreter
 
 const (
 	OPERATOR = iota
@@ -8,13 +6,13 @@ const (
 )
 
 type Token struct {
-	tokenType int
+	tokenType   int
 	stringValue string
-	floatValue float64
+	floatValue  float64
 }
 
-type BinaryTree struct {
-	token Token
-	leftNode *BinaryTree
-	rightNode *BinaryTree
+type TreeNode struct {
+	token     Token
+	leftNode  *TreeNode
+	rightNode *TreeNode
 }
