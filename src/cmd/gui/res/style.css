@@ -1,0 +1,67 @@
+@define-color vut-red rgb(238,39,58);
+@define-color vut-slight-red rgb(246,141,151);
+@define-color vut-blue rgb(43,185,241);
+@define-color soft-gray rgb(229,229,229);
+
+window {
+  background-color: white;
+}
+
+.calculator-button {
+  border-radius: 0px;
+  border: 0px;
+  box-shadow: none;
+  text-shadow: none;
+  color: rgb(90, 90, 90);
+  background: @soft-gray;
+  padding: 10px;
+  font-size: 22pt;
+}
+
+.calculator-equals {
+  background-color: @vut-red;
+  color: white;
+}
+
+/* Too much color? */
+/*.calculator-op {
+  background-color: @vut-slight-red;
+  color: white;
+}*/
+
+.calculator-button:hover {
+  background-color: @vut-blue;
+  color: white;
+}
+
+.calculator-button:active {
+  background-color: @vut-blue;
+  color: white;
+  border: 0px;
+}
+
+.calculator-textinput {
+  background: white;
+  padding: 10px;
+  font-size: 32pt;
+}
+
+.calculator-textinput text {
+  color: black;
+}
+
+.calculator-textinput-finished text {
+  font-size: 22pt;
+  color: rgb(90, 90, 90);
+}
+
+.calculator-textinput-result text {
+  padding-top: 0px;
+  margin-bottom: 10px;
+  border-bottom: 2px dashed @soft-gray;
+}
+
+.calculator-textinput-result text {
+  font-size: 22pt;
+  color: @vut-blue;
+}
