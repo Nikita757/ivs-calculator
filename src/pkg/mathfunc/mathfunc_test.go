@@ -188,3 +188,31 @@ func FactorialTestCase(t *testing.T, input float64, expectedOutput float64, expe
 		t.Errorf("Factorial(%f) err = %s; should be %s", input, err, expectedError)
 	}
 }
+
+func TestPower(t *testing.T) {
+	PowerTestCase(t, 0, 0, 0, errors.New("0^0 is undefined"))
+	PowerTestCase(t, 123, -1, 0, errors.New("invalid exponent: '-1', has to be >= 0"))
+	PowerTestCase(t, 34.2, 0, 1, nil)
+	PowerTestCase(t, 34.2, 1, 34.2, nil)
+	PowerTestCase(t, 5, 2, 25, nil)
+	PowerTestCase(t, -5, 2, 25, nil)
+	PowerTestCase(t, -5, 3, -125, nil)
+	PowerTestCase(t, 10, 4, 10000, nil)
+	PowerTestCase(t, 10, 4.4, 10000, nil)
+	PowerTestCase(t, 10.2, 4.4, 10824.321600, nil)
+	PowerTestCase(t, 10, 5, 100000, nil)
+	PowerTestCase(t, 525789, 8, 5841064044963377783181066373525779412512931840.000000, nil)
+	PowerTestCase(t, 525789, 20157, 0, errors.New("result of 525789.000000^20157 is too big"))
+
+}
+
+func PowerTestCase(t *testing.T, base float64, exp float64, expectedOutput float64, expectedError error) {
+	output, err := Power(base, exp)
+	// Check 10 decimals
+	if math.Abs(output-expectedOutput) > math.Pow(10, -10) {
+		t.Errorf("Power(%f, %f) = %f; should be %f", base, exp, output, expectedOutput)
+	}
+	if (err == nil && expectedError != nil) || (err != nil && expectedError == nil) || (err != nil && expectedError != nil && err.Error() != expectedError.Error()) {
+		t.Errorf("Power(%f, %f) err = %s; should be %s", base, exp, err, expectedError)
+	}
+}
