@@ -201,8 +201,9 @@ func TestPower(t *testing.T) {
 	PowerTestCase(t, 10, 4.4, 10000, nil)
 	PowerTestCase(t, 10.2, 4.4, 10824.321600, nil)
 	PowerTestCase(t, 10, 5, 100000, nil)
+	PowerTestCase(t, 25, 8, 152587890625, nil)
 	PowerTestCase(t, 525789, 8, 5841064044963377783181066373525779412512931840.000000, nil)
-	PowerTestCase(t, 525789, 20157, 0, errors.New("result of 525789.000000^20157 is too big"))
+	PowerTestCase(t, 525789, 20157, 0, errors.New("result of 525789.000^20157 is too big"))
 
 }
 
