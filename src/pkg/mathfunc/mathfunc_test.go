@@ -217,3 +217,65 @@ func PowerTestCase(t *testing.T, base float64, exp float64, expectedOutput float
 		t.Errorf("Power(%f, %f) err = %s; should be %s", base, exp, err, expectedError)
 	}
 }
+
+func TestRoot(t *testing.T) {
+	RootTestCase(t, 0, 0, 0, errors.New("can't calculate 0th root"))
+	RootTestCase(t, 32.4, 0, 0, errors.New("can't calculate 0th root"))
+	RootTestCase(t, -4, 2, 0, errors.New("can't calculate root 2 of a negative number: -4.000"))
+	RootTestCase(t, 4, -2, 0, errors.New("can't calculate root of a negative degree: -2"))
+
+	RootTestCase(t, 0, 1, 0, nil)
+	RootTestCase(t, 25, 1, 25, nil)
+	RootTestCase(t, -25, 1, -25, nil)
+	RootTestCase(t, 1, 34, 1, nil)
+
+	RootTestCase(t, 4, 2, 2, nil)
+	RootTestCase(t, 400000000, 2, 20000, nil)
+	RootTestCase(t, 400100000, 2, 20002.4998437695, nil)
+
+	RootTestCase(t, 64, 3, 4, nil)
+	RootTestCase(t, 64, 3.2, 4, nil)
+	RootTestCase(t, -64, 3.2, -4, nil)
+	RootTestCase(t, -4, 3, -1.587401052, nil)
+
+	RootTestCase(t, -12587458, 7, -10.33419999481, nil)
+	RootTestCase(t, 12587458, 8, 7.717777507194, nil)
+	RootTestCase(t, 5670, 56, 1.166885569, nil)
+	RootTestCase(t, 5670, 560, 1.015553546, nil)
+	RootTestCase(t, 5670, 560, 1.015553546, nil)
+	RootTestCase(t, 56705, 560871, 1.0000195156, nil)
+}
+
+// test by using the result of root as the base in exponentiation and checking if it equals to the original input to root
+func TestRootWihtPower(t *testing.T) {
+	RootWithPowerTestCase(t, -64, 3.1)
+	RootWithPowerTestCase(t, 120, 3)
+	RootWithPowerTestCase(t, -4, 3)
+	RootWithPowerTestCase(t, 5670, 56)
+	RootWithPowerTestCase(t, 1, 34)
+}
+
+func RootWithPowerTestCase(t *testing.T, x float64, n float64) {
+	output, err := Root(x, n)
+	expectedOutput := math.Pow(output, float64(int(n)))
+
+	// Check 10 decimals
+	if math.IsNaN(output) || math.Abs(x-expectedOutput) > math.Pow(10, -10) {
+		t.Errorf("Root(%f, %f) = %f; should be %f", x, n, output, expectedOutput)
+	}
+	if err != nil {
+		t.Errorf("Root(%f, %f) err = %s; should be nil", x, n, err)
+	}
+}
+
+func RootTestCase(t *testing.T, x float64, n float64, expectedOutput float64, expectedError error) {
+	output, err := Root(x, n)
+
+	// Check 10 decimals
+	if math.IsNaN(output) || math.Abs(output-expectedOutput) > math.Pow(10, -10) {
+		t.Errorf("Root(%f, %f) = %f; should be %f", x, n, output, expectedOutput)
+	}
+	if (err == nil && expectedError != nil) || (err != nil && expectedError == nil) || (err != nil && expectedError != nil && err.Error() != expectedError.Error()) {
+		t.Errorf("Root(%f, %f) err = %s; should be %s", x, n, err, expectedError)
+	}
+}
