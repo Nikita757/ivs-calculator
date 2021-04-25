@@ -5,6 +5,15 @@ import (
 	"math"
 )
 
+/**
+ * Power: returns base raised to the power of exp as a float64 value
+ *
+ * Only uses natural numbers (including 0) as the exponent. If epx is not an integer, it is floored, negative values of exp return an error.
+ * Base can be any float64 value.
+ *
+ * @param base float value used as the base of the exponentiation
+ * @param exp float value used as the exponent (internally converted to integer)
+ */
 func Power(base float64, exponent float64) (float64, error) {
 	exp := int(exponent) // exponent has to be a natural number - including 0
 	if exp < 0 {
@@ -18,7 +27,7 @@ func Power(base float64, exponent float64) (float64, error) {
 	for i := 0; i < exp; i++ {
 		res *= base
 		if math.IsInf(res, 0) {
-			return 0, fmt.Errorf("result of %f^%d is too big", base, exp)
+			return 0, fmt.Errorf("result of %.3f^%d is too big", base, exp)
 		}
 	}
 	return res, nil
