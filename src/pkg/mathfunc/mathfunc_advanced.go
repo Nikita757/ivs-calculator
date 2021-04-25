@@ -34,5 +34,33 @@ func Power(base float64, exponent float64) (float64, error) {
 }
 
 func Root(x float64, n float64) (float64, error) {
-	return 0, nil
+	degree := float64(int(n))
+
+	if degree == 0 {
+		return 0, fmt.Errorf("can't calculate 0th root")
+	} else if degree < 0 {
+		return 0, fmt.Errorf("can't calculate root of a negative degree: %d", int(degree))
+	}
+
+	// if degree is even and x < 0
+	if x < 0 && int(degree)%2 == 0 {
+		return 0, fmt.Errorf("can't calculate root %d of a negative number: %.3f", int(degree), x)
+	}
+
+	// handle special cases
+	if x == 0 || x == 1 || degree == 1 {
+		return x, nil
+	}
+
+	res, old, tmpPow := 1.0, 0.0, 0.0
+	oneOverDeg, degMinOne := 1/degree, degree-1
+	eps := math.Pow10(-10)
+
+	for math.Abs(old-res) > eps {
+		old = res
+		tmpPow = math.Pow(res, degMinOne)
+		res = oneOverDeg * ((degMinOne * res) + (x / tmpPow))
+	}
+
+	return res, nil
 }
