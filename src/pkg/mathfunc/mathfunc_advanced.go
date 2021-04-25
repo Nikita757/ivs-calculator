@@ -33,6 +33,18 @@ func Power(base float64, exponent float64) (float64, error) {
 	return res, nil
 }
 
+/**
+ * Root: returns the nth root of x as a float64 value
+ *
+ * Only works with natural values of n. Decimals are floored, negative numbers and 0 return an error.
+ * x can be any float64 value.
+ *
+ * Uses Newton's method to calculate the principal root. Stops the calculation when two subsequent approximations are closer than 10^-10.
+ * Meaning that the absolute value of their difference is less than 10^-10.
+ *
+ * @param x float value used as the radicand
+ * @param n float value used as the degree of the root (internally converted to integer)
+ */
 func Root(x float64, n float64) (float64, error) {
 	degree := float64(int(n))
 
