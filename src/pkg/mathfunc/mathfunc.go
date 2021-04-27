@@ -4,22 +4,90 @@ import (
 	"errors"
 )
 
-func Add(a float64, b float64) float64
+/**
+ * Add: adds two 64-bit floats
+ * @param a first float
+ * @param b second float
+ */
+func Add(a, b float64) float64 {
+	return a + b
+}
 
-func Substract(a float64, b float64) float64
+/**
+ * Substract: substracts two 64-bit floats
+ * @param a first float
+ * @param b second float
+ */
+func Substract(a, b float64) float64 {
+	return a - b
+}
 
-func Multiply(a float64, b float64) float64
+/**
+ * Multiply: multiplies two 64-bit floats
+ * @param a first float
+ * @param b second float
+ */
+func Multiply(a, b float64) float64 {
+	return a * b
+}
 
-func Divide(a float64, b float64) (float64, error) // b != 0
+/**
+ * Divide: divides two 64-bit floats. Returns error if b is zero.
+ * @param a first float
+ * @param b second float
+ */
+func Divide(a, b float64) (float64, error) {
+	if b == 0 {
+		return 0, errors.New("cannot divide by zero")
+	}
+	return a / b, nil
+}
 
-// Advanced math operations
+/**
+ * AbsoluteValue: returns absolute value of a 64-bit float
+ * @param a float value
+ */
+func AbsoluteValue(a float64) float64 {
+	if a < 0 {
+		return -a
+	}
+	return a
+}
 
-func Modulo(a float64, b float64) (float64, error) // b != 0
+/**
+ * Modulo: returns the remainder of division by two 64-bit floats. Returns error if b is zero.
+ * @param a first float value
+ * @param b second float value
+ */
+func Modulo(a, b float64) (float64, error) {
+	if b == 0 {
+		return 0, errors.New("cannot divide by zero")
+	}
+	quotient := int64(a / b)
+	remainder := a - float64(quotient)*b
+	if (a < 0 && b > 0 || a > 0 && b < 0) && remainder != 0 {
+		remainder += b
+	}
+	return remainder, nil
+}
 
-func AbsoluteValue(a float64) float64
-
-func Factorial(a float64) (float64, error) // a has to be an integer - could return an error, or round
-
-func Power(base float64, exponent float64) (float64, error) // exponent has to be a natural number (including 0?)
-
-func Root(x float64, n float64) (float64, error)
+/**
+ * Factorial: divides two 64-bit floats.
+ * Works only on natural numbers. Decimals are rounded, negative numbers return an error.
+ * @param a float value (internally converted to integer)
+ */
+func Factorial(a float64) (float64, error) {
+	if a < 0 {
+		return 0, errors.New("cannot calculate factorial of negative numbers")
+	}
+	var output uint64 = 1
+	var i uint64 = 1
+	for i = 1; i <= uint64(a); i++ {
+		previous := output
+		output *= i
+		if previous > output {
+			return 0, errors.New("factorial too big")
+		}
+	}
+	return float64(output), nil
+}
