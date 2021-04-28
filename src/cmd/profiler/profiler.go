@@ -1,13 +1,13 @@
 package main
 
 import (
-	"ivs-calculator/pkg/mathfunc"
 	"bufio"
-	"io"
-    "os"
-	"strings"
-	"strconv"
 	"fmt"
+	"io"
+	"ivs-calculator/pkg/mathfunc"
+	"os"
+	"strconv"
+	"strings"
 )
 
 func StandardDeviation(numbers []float64) float64 {
@@ -18,7 +18,7 @@ func StandardDeviation(numbers []float64) float64 {
 		sum = mathfunc.Add(sum, numbers[i])
 	}
 	mean, _ = mathfunc.Divide(sum, float64(len))
-	
+
 	for i := 0; i < len; i++ {
 		pow1, _ := mathfunc.Power(numbers[i], 2)
 		pow2, _ := mathfunc.Power(mean, 2)
@@ -35,11 +35,11 @@ func StandardDeviation(numbers []float64) float64 {
 func main() {
 	reader := bufio.NewReader(os.Stdin)
 	text := ""
-	for { 
+	for {
 		str, err := reader.ReadString('\n')
 		text += str
-		if (err == io.EOF) {
-			break;
+		if err == io.EOF {
+			break
 		}
 	}
 	s_numbers := strings.Fields(text)
