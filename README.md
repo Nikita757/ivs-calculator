@@ -5,6 +5,12 @@ Graphical calculator in Golang. BUT FIT project to practice Git and teamwork
 
 Ubuntu 64bit
 
+## Building
+
+```
+sudo apt-get install golang-go go-bindata libgtk-3-dev libcairo2-dev libglib2.0-dev libwebkit2gtk-4.0-dev
+```
+
 ## Authors
 
 - Tomáš Martykán (xmarty07)
