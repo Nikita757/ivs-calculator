@@ -1,7 +1,13 @@
-package profiler
+package main
 
 import (
 	"ivs-calculator/pkg/mathfunc"
+	"bufio"
+	"io"
+    "os"
+	"strings"
+	"strconv"
+	"fmt"
 )
 
 func StandardDeviation(numbers []float64) float64 {
@@ -26,3 +32,21 @@ func StandardDeviation(numbers []float64) float64 {
 	return res
 }
 
+func main() {
+	reader := bufio.NewReader(os.Stdin)
+	text := ""
+	for { 
+		str, err := reader.ReadString('\n')
+		text += str
+		if (err == io.EOF) {
+			break;
+		}
+	}
+	s_numbers := strings.Fields(text)
+	f_numbers := make([]float64, len(s_numbers))
+	for i := 0; i < len(f_numbers); i++ {
+		f_numbers[i], _ = strconv.ParseFloat(s_numbers[i], 64)
+	}
+
+	fmt.Println(StandardDeviation(f_numbers))
+}
