@@ -23,21 +23,17 @@ window {
   color: white;
 }
 
-/* Too much color? */
-/*.calculator-op {
-  background-color: @vut-slight-red;
-  color: white;
-}*/
-
-.calculator-button:hover {
+.calculator-help {
   background-color: @vut-blue;
   color: white;
 }
 
-.calculator-button:active {
-  background-color: @vut-blue;
-  color: white;
-  border: 0px;
+.calculator-button:hover, .calculator-button:active {
+  background-color: rgb(190, 190, 190);
+}
+
+.calculator-equals:hover, .calculator-equals:active {
+  background-color: @vut-slight-red;
 }
 
 .calculator-textinput {
@@ -59,9 +55,16 @@ window {
   padding-top: 0px;
   margin-bottom: 10px;
   border-bottom: 2px dashed @soft-gray;
-}
 
-.calculator-textinput-result text {
   font-size: 22pt;
   color: @vut-blue;
+}
+
+.calculator-textinput-error text {
+  padding-top: 0px;
+  margin-bottom: 10px;
+  border-bottom: 2px dashed @soft-gray;
+  
+  font-size: 14pt;
+  color: @vut-red;
 }

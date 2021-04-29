@@ -1,3 +1,16 @@
+html {
+    padding: 0;
+}
+
 body {
     font-family: 'Open Sans', sans-serif;
+    padding: 1rem;
+}
+
+header {
+    background-color: rgb(43,185,241);
+    color: white;
+    padding: 1rem;
+    margin: -1rem;
+    margin-bottom: 2rem;
 }

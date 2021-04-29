@@ -16,8 +16,11 @@
 package main
 
 import (
+	"fmt"
+	"ivs-calculator/pkg/interpreter"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/gotk3/gotk3/gdk"
 	"github.com/gotk3/gotk3/glib"
@@ -33,6 +36,7 @@ type WindowState struct {
 	oldTextInputs    []*gtk.TextView
 	textInput        *gtk.TextView
 	shouldScrollDown int
+	buttonPressTime  time.Time
 }
 
 /**
@@ -88,6 +92,14 @@ func (state *WindowState) createButton(label string) *gtk.Button {
 	styleContext.AddClass("calculator-button")
 	if label == "=" {
 		styleContext.AddClass("calculator-equals")
+	} else if label == "?" {
+		styleContext.AddClass("calculator-help")
+		image, err := gtk.ImageNewFromIconName("dialog-question-symbolic", gtk.ICON_SIZE_LARGE_TOOLBAR)
+		if err == nil {
+			button.SetLabel("")
+			button.SetImage(image)
+			button.SetAlwaysShowImage(true)
+		}
 	} else if strings.Index("0123456789", label) > -1 {
 		styleContext.AddClass("calculator-num")
 	} else if strings.Index("+-*/", label) > -1 {
@@ -96,6 +108,9 @@ func (state *WindowState) createButton(label string) *gtk.Button {
 	if label == "" {
 		button.SetSensitive(false)
 	}
+	button.Connect("button-press-event", func() {
+		state.buttonPressTime = time.Now()
+	})
 	button.Connect("clicked", func() {
 		state.buttonCallback(label)
 	})
@@ -112,25 +127,34 @@ func (state *WindowState) buttonCallback(label string) {
 		state.finishCalculation()
 		return
 	}
-	text := TextView_GetText(state.textInput)
+	buffer, _ := state.textInput.GetBuffer()
 	switch label {
-	case "C":
-		text = ""
-	case "POW":
-	case "ROOT":
-	case "FACT":
-	case "MOD":
-	case "ABS":
-		break
+	case "CE/C":
+		if buffer.GetHasSelection() {
+			buffer.DeleteSelection(false, false)
+		} else if time.Since(state.buttonPressTime).Milliseconds() > 300 {
+			buffer.SetText("")
+		} else {
+			cursorPosProp, _ := buffer.GetProperty("cursor-position")
+			cursorPos := cursorPosProp.(int)
+			if cursorPos == 0 {
+				return
+			}
+			startIter := buffer.GetStartIter()
+			startIter.ForwardCursorPositions(cursorPos - 1)
+			endIter := buffer.GetStartIter()
+			endIter.ForwardCursorPositions(cursorPos)
+			buffer.Delete(startIter, endIter)
+		}
+	case "|  |":
+		buffer.InsertAtCursor("|")
 	case "?":
 		glib.IdleAdd(func() {
 			showHelp()
 		})
 	default:
-		text = text + label
+		buffer.InsertAtCursor(label)
 	}
-	TextView_SetText(state.textInput, text)
-	// Strange hack, but it doesn't work first try
 	state.textInput.GrabFocus()
 }
 
@@ -147,7 +171,7 @@ func (state *WindowState) inputCallback(textView *gtk.TextView, ev *gdk.Event) b
 }
 
 /**
- * Perform calculation and move the result to history
+ * Perform calculation and handle the result
  */
 func (state *WindowState) finishCalculation() {
 	input := TextView_GetText(state.textInput)
@@ -156,23 +180,61 @@ func (state *WindowState) finishCalculation() {
 	}
 	// Async
 	go func() {
-		result := input
-
-		glib.IdleAdd(func() {
-			state.textInput.SetEditable(false)
-			styleContext, _ := state.textInput.GetStyleContext()
-			styleContext.AddClass("calculator-textinput-finished")
-			state.createTextInput()
-			TextView_SetText(state.textInput, result)
-			state.textInput.SetEditable(false)
-			state.textInput.SetJustification(gtk.JUSTIFY_RIGHT)
-			styleContext, _ = state.textInput.GetStyleContext()
-			styleContext.AddClass("calculator-textinput-result")
-			state.createTextInput()
-			state.scrollWindow.ShowAll()
-			state.shouldScrollDown = 3
-		})
+		input = strings.ReplaceAll(input, "r", "√")
+		input = strings.ReplaceAll(input, "p", "^")
+		node, err := interpreter.Parse(input)
+		if err != nil {
+			state.showCalculationError(fmt.Sprintf("syntax error at position %d", err[0]))
+			return
+		}
+		floatResult, err2 := interpreter.Interpret(node)
+		if err2 != nil {
+			state.showCalculationError(err2.Error())
+			return
+		}
+		result := fmt.Sprintf("%g", floatResult)
+		state.showCalculationResult(result)
 	}()
+}
+
+/**
+ * Show calculation result
+ */
+func (state *WindowState) showCalculationResult(result string) {
+	glib.IdleAdd(func() {
+		state.textInput.SetEditable(false)
+		styleContext, _ := state.textInput.GetStyleContext()
+		styleContext.AddClass("calculator-textinput-finished")
+		state.createTextInput()
+		TextView_SetText(state.textInput, result)
+		state.textInput.SetEditable(false)
+		state.textInput.SetJustification(gtk.JUSTIFY_RIGHT)
+		styleContext, _ = state.textInput.GetStyleContext()
+		styleContext.AddClass("calculator-textinput-result")
+		state.createTextInput()
+		state.scrollWindow.ShowAll()
+		state.shouldScrollDown = 3
+	})
+}
+
+/**
+ * Show calculation error message
+ */
+func (state *WindowState) showCalculationError(err string) {
+	glib.IdleAdd(func() {
+		state.textInput.SetEditable(false)
+		styleContext, _ := state.textInput.GetStyleContext()
+		styleContext.AddClass("calculator-textinput-finished")
+		state.createTextInput()
+		TextView_SetText(state.textInput, err)
+		state.textInput.SetEditable(false)
+		state.textInput.SetJustification(gtk.JUSTIFY_RIGHT)
+		styleContext, _ = state.textInput.GetStyleContext()
+		styleContext.AddClass("calculator-textinput-error")
+		state.createTextInput()
+		state.scrollWindow.ShowAll()
+		state.shouldScrollDown = 3
+	})
 }
 
 /**
@@ -187,11 +249,11 @@ func createLayout() *gtk.Grid {
 	grid.Attach(state.scrollWindow, 0, 0, 5, 1)
 
 	buttonLabels := [5][5]string{
-		{"POW", "(", ")", "C", "/"},
-		{"ROOT", "7", "8", "9", "*"},
-		{"FACT", "4", "5", "6", "-"},
-		{"MOD", "1", "2", "3", "+"},
-		{"ABS", "0", "?", ",", "="},
+		{"√", "(", ")", "CE/C", "/"},
+		{"^", "7", "8", "9", "*"},
+		{"!", "4", "5", "6", "-"},
+		{"%", "1", "2", "3", "+"},
+		{"|  |", "0", ",", "?", "="},
 	}
 	for i := 0; i < 25; i++ {
 		label := buttonLabels[i/5][i%5]
