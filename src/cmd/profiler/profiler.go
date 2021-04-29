@@ -18,7 +18,7 @@ func StandardDeviation(numbers []float64) float64 {
 		sum2 = mathfunc.Add(sum2, numbers[i])
 	}
 	sum2, _ = mathfunc.Divide(sum2, float64(num_len))
-	sum2, _ = mathfunc.Power(sum2, 2);
+	sum2, _ = mathfunc.Power(sum2, 2)
 	sum2 = mathfunc.Multiply(float64(num_len), sum2)
 
 	for i := 0; i < num_len; i++ {
