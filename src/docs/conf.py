@@ -12,7 +12,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 autoapi_type = 'go'
 
-autoapi_dirs = ['../pkg/mathfunc']
+autoapi_dirs = ['../pkg/mathfunc', '../pkg/interpreter']
 
 def prepare_docstring(string):
   print(string)

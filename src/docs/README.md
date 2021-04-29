@@ -5,9 +5,9 @@ Since Golang is not supported in Doxygen, we use a tool called Sphinx and severa
 To get the necessary tools, use the following commands (Golang and Python3 needed):
 
 ```
-go get github.com/readthedocs/godocjson
-pip install sphinx sphinx-autoapi sphinx-rtd-theme
-pip install https://github.com/martykan/sphinxcontrib-golangdomain/archive/refs/heads/master.tar.gz
+go get -u github.com/readthedocs/godocjson # make sure you have godocjson in PATH
+pip3 install sphinx sphinx-autoapi sphinx-rtd-theme
+pip3 install https://github.com/martykan/sphinxcontrib-golangdomain/archive/refs/heads/master.tar.gz
 ```
 
 To generate the documentation, run

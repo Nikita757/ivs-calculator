@@ -8,7 +8,9 @@ Ubuntu 64bit
 ## Building
 
 ```
-sudo apt-get install golang-go go-bindata libgtk-3-dev libcairo2-dev libglib2.0-dev libwebkit2gtk-4.0-dev
+sudo apt-get install golang-go go-bindata libgtk-3-dev libcairo2-dev libglib2.0-dev libwebkit2gtk-4.0-dev pandoc
+# for building PDF manual:
+sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra texlive-xetex
 ```
 
 ## Authors
