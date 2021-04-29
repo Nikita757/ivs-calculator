@@ -1,32 +1,33 @@
 package main
 
 import (
-	"testing"
 	"bufio"
 	"io"
-    "os"
-	"strings"
-	"strconv"
 	"log"
+	"os"
+	"strconv"
+	"strings"
+	"testing"
 )
 
 func TestSD(t *testing.T) {
 	numbers := []float64{321, 43, 400, 10, 143, 400, 500, 640, 320, 4052}
-	
+
 	total := StandardDeviation(numbers)
-    if total != 1795.3364896617882 {
-       t.Errorf("Result is incorrect")
-    }
+	if total != 1200.121239245806
+	 {
+		t.Errorf("Result is incorrect")
+	}
 }
 
 func benchmarkSD(file *os.File, b *testing.B) {
 	reader := bufio.NewReader(file)
 	text := ""
-	for { 
+	for {
 		str, err := reader.ReadString('\n')
 		text += str
-		if (err == io.EOF) {
-			break;
+		if err == io.EOF {
+			break
 		}
 	}
 	s_numbers := strings.Fields(text)
@@ -44,19 +45,19 @@ func benchmarkSD(file *os.File, b *testing.B) {
 func BenchmarkSD10(b *testing.B) {
 	f, err := os.Open("./testdata10")
 	if err != nil {
-        log.Fatal(err)
-    }
-	
+		log.Fatal(err)
+	}
+
 	defer f.Close()
 	benchmarkSD(f, b)
-	
+
 }
 
 func BenchmarkSD100(b *testing.B) {
 	f, err := os.Open("./testdata100")
 	if err != nil {
-        log.Fatal(err)
-    }
+		log.Fatal(err)
+	}
 
 	defer f.Close()
 	benchmarkSD(f, b)
@@ -65,8 +66,8 @@ func BenchmarkSD100(b *testing.B) {
 func BenchmarkSD1000(b *testing.B) {
 	f, err := os.Open("./testdata1000")
 	if err != nil {
-        log.Fatal(err)
-    }
+		log.Fatal(err)
+	}
 
 	defer f.Close()
 	benchmarkSD(f, b)

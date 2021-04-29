@@ -1,45 +1,44 @@
 package main
 
 import (
-	"ivs-calculator/pkg/mathfunc"
 	"bufio"
-	"io"
-    "os"
-	"strings"
-	"strconv"
 	"fmt"
+	"io"
+	"ivs-calculator/pkg/mathfunc"
+	"os"
+	"strconv"
+	"strings"
 )
 
 func StandardDeviation(numbers []float64) float64 {
-	var sum, mean, res float64
-	len := len(numbers)
+	var sum1, sum2, res float64
+	num_len := len(numbers)
 
-	for i := 0; i < len; i++ {
-		sum = mathfunc.Add(sum, numbers[i])
+	for i := 0; i < num_len; i++ {
+		sum2 = mathfunc.Add(sum2, numbers[i])
 	}
-	mean, _ = mathfunc.Divide(sum, float64(len))
-	
-	for i := 0; i < len; i++ {
-		pow1, _ := mathfunc.Power(numbers[i], 2)
-		pow2, _ := mathfunc.Power(mean, 2)
-		res = mathfunc.Add(res, mathfunc.Substract(pow1, mathfunc.Multiply(float64(len), pow2)))
-	}
+	sum2, _ = mathfunc.Divide(sum2, float64(num_len))
+	sum2, _ = mathfunc.Power(sum2, 2);
+	sum2 = mathfunc.Multiply(float64(num_len), sum2)
 
-	div, _ := mathfunc.Divide(1, mathfunc.Substract(1, float64(len)))
-	res = mathfunc.Multiply(res, div)
+	for i := 0; i < num_len; i++ {
+		pow, _ := mathfunc.Power(numbers[i], 2)
+		sum1 = mathfunc.Add(sum1, pow)
+	}
+	res = mathfunc.Substract(sum1, sum2)
+	res, _ = mathfunc.Divide(res, float64(num_len-1))
 	res, _ = mathfunc.Root(res, 2)
-
 	return res
 }
 
 func main() {
 	reader := bufio.NewReader(os.Stdin)
 	text := ""
-	for { 
+	for {
 		str, err := reader.ReadString('\n')
 		text += str
-		if (err == io.EOF) {
-			break;
+		if err == io.EOF {
+			break
 		}
 	}
 	s_numbers := strings.Fields(text)
