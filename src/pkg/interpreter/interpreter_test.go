@@ -225,3 +225,136 @@ func inToPostTestCase(t *testing.T, input []string, expectedOutput []string) {
 		t.Errorf("inToPost(%v) = %v, should be %v", input, output, expectedOutput)
 	}
 }
+
+func TestToTreeOper(t *testing.T) {
+	// Basic operations
+	stack := []*TreeNode{
+		&TreeNode{Token{NUMBER, "", 2}, nil, nil},
+		&TreeNode{Token{NUMBER, "", 3}, nil, nil}}
+	token := "+"
+	expectedOutput := []*TreeNode{
+		&TreeNode{Token{OPERATOR, "+", 0},
+			&TreeNode{Token{NUMBER, "", 2}, nil, nil},
+			&TreeNode{Token{NUMBER, "", 3}, nil, nil}}}
+	toTreeOperTestCase(t, "plus", stack, token, expectedOutput)
+
+	stack = []*TreeNode{
+		&TreeNode{Token{NUMBER, "", 2}, nil, nil},
+		&TreeNode{Token{NUMBER, "", 3}, nil, nil}}
+	token = "-"
+	expectedOutput = []*TreeNode{
+		&TreeNode{Token{OPERATOR, "-", 0},
+			&TreeNode{Token{NUMBER, "", 2}, nil, nil},
+			&TreeNode{Token{NUMBER, "", 3}, nil, nil}}}
+	toTreeOperTestCase(t, "minus", stack, token, expectedOutput)
+
+	stack = []*TreeNode{
+		&TreeNode{Token{NUMBER, "", 2}, nil, nil},
+		&TreeNode{Token{NUMBER, "", 3}, nil, nil}}
+	token = "*"
+	expectedOutput = []*TreeNode{
+		&TreeNode{Token{OPERATOR, "*", 0},
+			&TreeNode{Token{NUMBER, "", 2}, nil, nil},
+			&TreeNode{Token{NUMBER, "", 3}, nil, nil}}}
+	toTreeOperTestCase(t, "times", stack, token, expectedOutput)
+
+	stack = []*TreeNode{
+		&TreeNode{Token{NUMBER, "", 2}, nil, nil},
+		&TreeNode{Token{NUMBER, "", 3}, nil, nil}}
+	token = "/"
+	expectedOutput = []*TreeNode{
+		&TreeNode{Token{OPERATOR, "/", 0},
+			&TreeNode{Token{NUMBER, "", 2}, nil, nil},
+			&TreeNode{Token{NUMBER, "", 3}, nil, nil}}}
+	toTreeOperTestCase(t, "divide", stack, token, expectedOutput)
+
+	stack = []*TreeNode{
+		&TreeNode{Token{NUMBER, "", 2}, nil, nil},
+		&TreeNode{Token{NUMBER, "", 3}, nil, nil}}
+	token = "^"
+	expectedOutput = []*TreeNode{
+		&TreeNode{Token{OPERATOR, "pow", 0},
+			&TreeNode{Token{NUMBER, "", 2}, nil, nil},
+			&TreeNode{Token{NUMBER, "", 3}, nil, nil}}}
+	toTreeOperTestCase(t, "power", stack, token, expectedOutput)
+
+	stack = []*TreeNode{
+		&TreeNode{Token{NUMBER, "", 2}, nil, nil},
+		&TreeNode{Token{NUMBER, "", 3}, nil, nil}}
+	token = "%"
+	expectedOutput = []*TreeNode{
+		&TreeNode{Token{OPERATOR, "mod", 0},
+			&TreeNode{Token{NUMBER, "", 2}, nil, nil},
+			&TreeNode{Token{NUMBER, "", 3}, nil, nil}}}
+	toTreeOperTestCase(t, "modulo", stack, token, expectedOutput)
+
+	// one operand operations
+	stack = []*TreeNode{
+		&TreeNode{Token{NUMBER, "", 3}, nil, nil}}
+	token = "!"
+	expectedOutput = []*TreeNode{
+		&TreeNode{Token{OPERATOR, "fac", 0},
+			&TreeNode{Token{NUMBER, "", 3}, nil, nil}, nil}}
+	toTreeOperTestCase(t, "fac", stack, token, expectedOutput)
+
+	stack = []*TreeNode{
+		&TreeNode{Token{NUMBER, "", 3}, nil, nil}}
+	token = "abs"
+	expectedOutput = []*TreeNode{
+		&TreeNode{Token{OPERATOR, "abs", 0},
+			&TreeNode{Token{NUMBER, "", 3}, nil, nil}, nil}}
+	toTreeOperTestCase(t, "abs", stack, token, expectedOutput)
+
+	// root
+	stack = []*TreeNode{
+		&TreeNode{Token{NUMBER, "", 2}, nil, nil},
+		&TreeNode{Token{NUMBER, "", 3}, nil, nil}}
+	token = "√"
+	expectedOutput = []*TreeNode{
+		&TreeNode{Token{OPERATOR, "root", 0},
+			&TreeNode{Token{NUMBER, "", 3}, nil, nil},
+			&TreeNode{Token{NUMBER, "", 2}, nil, nil}}}
+	toTreeOperTestCase(t, "root", stack, token, expectedOutput)
+
+	// unary +,- operators
+	stack = []*TreeNode{
+		&TreeNode{Token{NUMBER, "", 3}, nil, nil}}
+	token = "m"
+	expectedOutput = []*TreeNode{
+		&TreeNode{Token{OPERATOR, "*", 0.0},
+			&TreeNode{Token{NUMBER, "", 3}, nil, nil},
+			&TreeNode{Token{NUMBER, "-1", -1}, nil, nil}}}
+	toTreeOperTestCase(t, "unary minus", stack, token, expectedOutput)
+
+	stack = []*TreeNode{
+		&TreeNode{Token{NUMBER, "", 3}, nil, nil}}
+	token = "p"
+	expectedOutput = []*TreeNode{
+		&TreeNode{Token{OPERATOR, "*", 0.0},
+			&TreeNode{Token{NUMBER, "", 3}, nil, nil},
+			&TreeNode{Token{NUMBER, "1", 1}, nil, nil}}}
+	toTreeOperTestCase(t, "unary minus", stack, token, expectedOutput)
+
+	// test nested operations
+	stack = []*TreeNode{
+		&TreeNode{Token{NUMBER, "", 2}, nil, nil},
+		&TreeNode{Token{OPERATOR, "*", 0.0},
+			&TreeNode{Token{NUMBER, "", 3}, nil, nil},
+			&TreeNode{Token{NUMBER, "", 5}, nil, nil}}}
+	token = "+"
+	expectedOutput = []*TreeNode{
+		&TreeNode{Token{OPERATOR, "+", 0},
+			&TreeNode{Token{NUMBER, "", 2}, nil, nil},
+			&TreeNode{Token{OPERATOR, "*", 0.0},
+				&TreeNode{Token{NUMBER, "", 3}, nil, nil},
+				&TreeNode{Token{NUMBER, "", 5}, nil, nil}}}}
+	toTreeOperTestCase(t, "nested plus, times", stack, token, expectedOutput)
+}
+
+func toTreeOperTestCase(t *testing.T, tName string, input []*TreeNode, token string, expectedOutput []*TreeNode) {
+	output := toTreeOper(input, token)
+
+	if !reflect.DeepEqual(output, expectedOutput) {
+		t.Errorf("toTreeOper(%s) is incorrect, token = %s", tName, token)
+	}
+}
