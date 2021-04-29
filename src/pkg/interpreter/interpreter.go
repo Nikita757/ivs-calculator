@@ -140,14 +140,14 @@ func Interpret(root *TreeNode) (float64, error) {
 }
 
 /**
- * toSlice: converts math expression from string to slice
+ * toSlice: converts math expression from string to slice and checks for syntax errors
  *
  * @param in inputted math expression in form of a string
  * @return []string slice consisted of inputted math expression
  * @return []int slice of mistakes in mathematical notation. Consider as an error return, if length of it is > 0
  */
 func toSlice(in string) ([]string, []int) {
-	//
+	// check if input actually contains something
 	if in == "" {
 		return nil, []int{0}
 	}
@@ -160,12 +160,23 @@ func toSlice(in string) ([]string, []int) {
 	consNum := false
 	isFloat := false
 	wantPow := false
+	wantRoot := false
 	closedBr := false
 	number := ""
 	for i, tokenRune := range in {
 		token := string(tokenRune)
+		if token == "p" {
+			token = "^"
+		} else if token == "r" {
+			token = "√"
+		}
 		if token == "(" || token == ")" || token == "+" || token == "-" || token == "*" || token == "/" || token == "!" || token == "^" || token == "√" || token == "|" || token == "%" {
+			// checking for inappropriate operator in the beginning of the expression
 			if i == 0 && (token == ")" || token == "*" || token == "/" || token == "!" || token == "^" || token == "%") {
+				wrongSynt = append(wrongSynt, i)
+			}
+			// checking for a missing operand in the end of the expression
+			if i == len(in)-1 && token != ")" && token != "|" && token != "!" {
 				wrongSynt = append(wrongSynt, i)
 			}
 			// append a number to slice if it's construction is over
@@ -174,17 +185,26 @@ func toSlice(in string) ([]string, []int) {
 				outSlice = append(outSlice, number)
 				number = ""
 			}
-			//
-			if wantPow {
+			// check for a correct operand after root sign
+			if wantRoot && token != "(" {
+				wantRoot = false
+				wrongSynt = append(wrongSynt, i)
+				continue
+			}
+			// check for a correct operand after ^ sign
+			if wantPow && token != "(" {
 				wantPow = false
 				wrongSynt = append(wrongSynt, i)
 				continue
 			}
+			// check for a correct root usage
 			if token == "√" {
 				var prev string
+				wantRoot = true
 				if len(outSlice) > 0 {
 					prev = outSlice[len(outSlice)-1]
 					_, err := strconv.Atoi(prev)
+					// if err != nil =>
 					if err != nil && prev != ")" {
 						outSlice = append(outSlice, "2")
 					}
@@ -192,15 +212,17 @@ func toSlice(in string) ([]string, []int) {
 					outSlice = append(outSlice, "2")
 				}
 			}
+			// check for a correct operand before ^ sign
 			if token == "^" {
 				prev := outSlice[len(outSlice)-1]
 				_, err := strconv.Atoi(prev)
-				if err != nil {
+				if err != nil && prev != ")" {
 					wrongSynt = append(wrongSynt, i)
 					continue
 				}
 				wantPow = true
 			}
+			// check for repeating + or - signs
 			if token == "-" && i > 0 {
 				if outSlice[len(outSlice)-1] == "-" {
 					outSlice[len(outSlice)-1] = "+"
@@ -208,6 +230,7 @@ func toSlice(in string) ([]string, []int) {
 					outSlice[len(outSlice)-1] = "-"
 				}
 			}
+			// check for repeating + or - signs
 			if token == "+" && i > 0 {
 				if outSlice[len(outSlice)-1] == "+" {
 					outSlice[len(outSlice)-1] = "+"
@@ -215,6 +238,7 @@ func toSlice(in string) ([]string, []int) {
 					outSlice[len(outSlice)-1] = "-"
 				}
 			}
+			// check for repeating inappropriate sings
 			if token == "*" || token == "/" || token == "!" || token == "%" {
 				prev := outSlice[len(outSlice)-1]
 				if prev == "*" || prev == "/" || prev == "!" || prev == "%" || prev == "+" || prev == "-" {
@@ -231,8 +255,8 @@ func toSlice(in string) ([]string, []int) {
 					absPos = append(absPos, i)
 				}
 			}
-
 			if token == "(" {
+				// check if there is a operator between ) and (
 				if closedBr {
 					wrongSynt = append(wrongSynt, i)
 					continue
@@ -241,6 +265,7 @@ func toSlice(in string) ([]string, []int) {
 				brackPos = append(brackPos, i)
 			}
 			if token == ")" {
+				// check for a correct closure of a bracket
 				if len(brackPos) == 0 {
 					wrongSynt = append(wrongSynt, i)
 					continue
@@ -257,6 +282,7 @@ func toSlice(in string) ([]string, []int) {
 			openedBr = false
 			outSlice = append(outSlice, token)
 		} else if unicode.IsDigit(tokenRune) || (consNum && (token == "," || token == ".")) {
+			// check for an operator after a closing bracket
 			if closedBr {
 				closedBr = false
 				wrongSynt = append(wrongSynt, i)
@@ -265,6 +291,7 @@ func toSlice(in string) ([]string, []int) {
 			if wantPow {
 				wantPow = false
 			}
+			// check if there are no spare . or ,
 			if token == "," || token == "." {
 				if !isFloat {
 					number += "."
@@ -339,11 +366,11 @@ func inToPost(input []string) []string {
 					operator := stack[len(stack)-1]
 					stack = stack[:len(stack)-1]
 					if operator == "|" {
+						post = append(post, "abs")
 						break
 					}
 					post = append(post, operator)
 					afterOpPar = true
-					post = append(post, "abs")
 				}
 			} else {
 				openedAbs = true
