@@ -1,2 +1,12 @@
+github.com/go-bindata/go-bindata v3.1.2+incompatible h1:5vjJMVhowQdPzjE1LdxyFF7YFTXg5IgGVW4gBr5IbvE=
+github.com/go-bindata/go-bindata v3.1.2+incompatible/go.mod h1:xK8Dsgwmeed+BBsSy2XTopBn/8uK2HWuGSnA11C3Joo=
 github.com/gotk3/gotk3 v0.5.3-0.20210326060404-6328e5470ece h1:97BTiWMRSBA/fkg4irBHzQPv8E30dIUThuAtQn/MK6Q=
 github.com/gotk3/gotk3 v0.5.3-0.20210326060404-6328e5470ece/go.mod h1:/hqFpkNa9T3JgNAE2fLvCdov7c5bw//FHNZrZ3Uv9/Q=
+github.com/martykan/go-webkit2 v0.0.0-20210428182109-d19637ae0fd4 h1:8i1A/cz6yhyG4A66nlJSB8f0PniAzmH/q8t0B9E4C8A=
+github.com/martykan/go-webkit2 v0.0.0-20210428182109-d19637ae0fd4/go.mod h1:1sMHb63J09n+jyAYokZ9U3DkD6E8IKb6rdon3/4YpKI=
+github.com/martykan/go-webkit2-nojs v0.0.0-20210428182109-d19637ae0fd4 h1:ObjN0oAzgY1jNKcEOansfOYxL8ZDAm8AGNNX09ruZd8=
+github.com/martykan/go-webkit2-nojs v0.0.0-20210428182109-d19637ae0fd4/go.mod h1:HeRN/4G9a7SXTnqdQn0LfSmI4ecRmGQekqAXDoC1Fhc=
+github.com/sourcegraph/go-webkit2 v0.0.0-20170811231113-ade305cf91f4 h1:/GZIprdcSTZ1ScZXIb0EYTgCt2izmqDXAKFQGszWbcE=
+github.com/sourcegraph/go-webkit2 v0.0.0-20170811231113-ade305cf91f4/go.mod h1:MeIulxHy//0+TzvJV9+kG4UZCNb8f8WIR/rU2CrnTQI=
+github.com/sqs/gojs v0.0.0-20170522041006-12d0b3282819 h1:wZTkhnqk8Q6VpWMn1NPHZJ/PgE/YRrqctkAXcSgIdDc=
+github.com/sqs/gojs v0.0.0-20170522041006-12d0b3282819/go.mod h1:M7hbdQaz37Cdb0vquiwCsvKKkDCCbKQ+T04iUVtXIqE=

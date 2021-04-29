@@ -116,13 +116,16 @@ func (state *WindowState) buttonCallback(label string) {
 	switch label {
 	case "C":
 		text = ""
-		break
 	case "POW":
 	case "ROOT":
 	case "FACT":
 	case "MOD":
 	case "ABS":
 		break
+	case "?":
+		glib.IdleAdd(func() {
+			showHelp()
+		})
 	default:
 		text = text + label
 	}
@@ -188,7 +191,7 @@ func createLayout() *gtk.Grid {
 		{"ROOT", "7", "8", "9", "*"},
 		{"FACT", "4", "5", "6", "-"},
 		{"MOD", "1", "2", "3", "+"},
-		{"ABS", "0", "", ",", "="},
+		{"ABS", "0", "?", ",", "="},
 	}
 	for i := 0; i < 25; i++ {
 		label := buttonLabels[i/5][i%5]
@@ -216,7 +219,8 @@ func createWindow() {
 
 	// Styling
 	cssProvider, _ := gtk.CssProviderNew()
-	cssProvider.LoadFromPath("res/style.css")
+	data, _ := Asset("res/style.css")
+	cssProvider.LoadFromData(string(data))
 	screen, _ := gdk.ScreenGetDefault()
 	gtk.AddProviderForScreen(screen, cssProvider, gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 	styleContext, _ := win.GetStyleContext()
