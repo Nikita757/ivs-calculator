@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os/exec"
 
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
@@ -25,6 +26,18 @@ func showHelp() {
 
 	webView.Connect("load-failed", func() {
 		fmt.Println("Load failed.")
+	})
+	webView.Connect("load-changed", func(_ *glib.Object, i int) {
+		loadEvent := webkit2.LoadEvent(i)
+		switch loadEvent {
+		case webkit2.LoadCommitted:
+			if webView.URI() != "about:blank" {
+				fmt.Println("Opening external page")
+				exec.Command("xdg-open", webView.URI()).Run()
+				data, _ := Asset("res/help.html")
+				webView.LoadHTML(string(data), "")
+			}
+		}
 	})
 
 	glib.IdleAdd(func() bool {
