@@ -14,11 +14,11 @@ func Add(a, b float64) float64 {
 }
 
 /**
- * Substract: substracts two 64-bit floats
+ * Subtract: subtracts two 64-bit floats
  * @param a first float
  * @param b second float
  */
-func Substract(a, b float64) float64 {
+func Subtract(a, b float64) float64 {
 	return a - b
 }
 
