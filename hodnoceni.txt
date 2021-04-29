@@ -1,0 +1,4 @@
+xmarty07 110 (řízení projektu, UI, dokumentace, installer)
+xstolf00 110 (interpreter, mocnina a odmocnina)
+xmelec02 100 (datové struktury, debugging, profiling)
+xgutun00 80 (tokenizer a parser, struktura projektu)
