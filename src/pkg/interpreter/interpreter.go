@@ -7,14 +7,6 @@ import (
 	"unicode"
 )
 
-type SyntaxError struct {
-	index int
-}
-
-func (se *SyntaxError) Error() string {
-	return fmt.Sprintf("Invalid syntax at index: %d.", se.index)
-}
-
 // order of operations by their precedence in expression
 var operOrder = map[string]struct {
 	prec   int
