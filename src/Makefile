@@ -19,7 +19,19 @@ test: pkg/*
 	go test ./pkg/...
 
 # Delivery
-pack:
+PACKNAME=xmarty07_xstolf00_xmelec02_xgutun00
+PACKDIR=/tmp/$(PACKNAME)
+pack: clean
+	mkdir $(PACKDIR)
+	cp -R ../ $(PACKDIR)/repo/
+	$(MAKE) doc
+	cp -R docs/_build/html/ $(PACKDIR)/doc/
+	$(MAKE) debian
+	mkdir $(PACKDIR)/install/
+	cp ivs-calculator.deb $(PACKDIR)/install/
+	cd $(PACKDIR) && zip -r $(PACKNAME).zip *
+	cp $(PACKDIR)/$(PACKNAME).zip .
+	rm -rf $(PACKDIR)
 
 .PHONY: doc manual manual_builtin debian # handled in other Makefiles
 
@@ -55,3 +67,4 @@ clean:
 	rm -f ./cmd/gui/gui ./cmd/profiler/profiler ./cmd/gui/bindata.go ./ivs-calculator.deb
 	$(MAKE) -C docs clean
 	$(MAKE) -C manual clean
+	rm -rf $(PACKDIR) $(PACKNAME).zip
