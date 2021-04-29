@@ -1,0 +1,8 @@
+Package: ivs-calculator  
+Version: 1.0 
+Section: utils
+Priority: optional 
+Architecture: amd64 
+Depends: libgtk-3-0
+Maintainer: Tomáš Martykán <xmarty07@stud.fit.vutbr.cz>
+Description: Easy to use calculator app
