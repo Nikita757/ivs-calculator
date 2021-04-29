@@ -147,8 +147,9 @@ func Interpret(root *TreeNode) (float64, error) {
  * @return []int slice of mistakes in mathematical notation. Consider as an error return, if length of it is > 0
  */
 func toSlice(in string) ([]string, []int) {
+	//
 	if in == "" {
-		return nil, nil
+		return nil, []int{0}
 	}
 	outSlice := make([]string, 0)
 	wrongSynt := make([]int, 0)
@@ -178,6 +179,18 @@ func toSlice(in string) ([]string, []int) {
 				wantPow = false
 				wrongSynt = append(wrongSynt, i)
 				continue
+			}
+			if token == "√" {
+				var prev string
+				if len(outSlice) > 0 {
+					prev = outSlice[len(outSlice)-1]
+					_, err := strconv.Atoi(prev)
+					if err != nil && prev != ")" {
+						outSlice = append(outSlice, "2")
+					}
+				} else {
+					outSlice = append(outSlice, "2")
+				}
 			}
 			if token == "^" {
 				prev := outSlice[len(outSlice)-1]
@@ -408,9 +421,12 @@ func toTreeOper(stack []*TreeNode, token string) []*TreeNode {
 	case "+", "-", "/", "*", "^", "%":
 		l = stack[len(stack)-2]
 		r = stack[len(stack)-1]
-	case "!", "√", "abs":
+	case "!", "abs":
 		l = stack[len(stack)-1]
 		r = nil
+	case "√":
+		l = stack[len(stack)-1]
+		r = stack[len(stack)-2]
 	}
 
 	if token == "%" {
