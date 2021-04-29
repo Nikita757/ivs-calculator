@@ -17,7 +17,7 @@ func TestSD(t *testing.T) {
 
 	total := StandardDeviation(numbers)
 	if total != expectedRes {
-		t.Errorf("Result is: %.10f, shoudl be: %.10f", total, expectedRes)
+		t.Errorf("Result is: %.10f, should be: %.10f", total, expectedRes)
 	}
 
 	numbers = []float64{10, 20}
@@ -25,7 +25,7 @@ func TestSD(t *testing.T) {
 
 	total = StandardDeviation(numbers)
 	if math.Abs(total-expectedRes) > math.Pow(10, -10) {
-		t.Errorf("Result is: %.10f, shoudl be: %.10f", total, expectedRes)
+		t.Errorf("Result is: %.10f, should be: %.10f", total, expectedRes)
 	}
 
 	numbers = []float64{987, 382, 928, 278, 273, 421, 515, 832, 286, 495}
@@ -33,7 +33,7 @@ func TestSD(t *testing.T) {
 
 	total = StandardDeviation(numbers)
 	if math.Abs(total-expectedRes) > math.Pow(10, -10) {
-		t.Errorf("Result is: %.10f, shoudl be: %.10f", total, expectedRes)
+		t.Errorf("Result is: %.10f, should be: %.10f", total, expectedRes)
 	}
 
 	numbers = []float64{987.2, 382.5, 928, 278, 273, 421, 515, 832, 286, 495}
@@ -41,7 +41,7 @@ func TestSD(t *testing.T) {
 
 	total = StandardDeviation(numbers)
 	if math.Abs(total-expectedRes) > math.Pow(10, -10) {
-		t.Errorf("Result is: %.10f, shoudl be: %.10f", total, expectedRes)
+		t.Errorf("Result is: %.10f, should be: %.10f", total, expectedRes)
 	}
 }
 
