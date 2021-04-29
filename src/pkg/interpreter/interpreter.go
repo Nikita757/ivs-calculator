@@ -59,7 +59,7 @@ func evalOperator(node *TreeNode) (float64, error) {
 	case "*":
 		return mathfunc.Multiply(left, right), nil
 	case "-":
-		return mathfunc.Substract(left, right), nil
+		return mathfunc.Subtract(left, right), nil
 	case "/":
 		return mathfunc.Divide(left, right)
 	case "mod":

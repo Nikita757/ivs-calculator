@@ -24,27 +24,27 @@ func AddTestCase(t *testing.T, inputA float64, inputB float64, expectedOutput fl
 	}
 }
 
-func TestSubstract(t *testing.T) {
-	SubstractTestCase(t, 0, 0, 0)
-	SubstractTestCase(t, 1, 1, 0)
-	SubstractTestCase(t, 1, -1, 2)
-	SubstractTestCase(t, -1, 1, -2)
-	SubstractTestCase(t, -1, -1, 0)
+func TestSubtract(t *testing.T) {
+	SubtractTestCase(t, 0, 0, 0)
+	SubtractTestCase(t, 1, 1, 0)
+	SubtractTestCase(t, 1, -1, 2)
+	SubtractTestCase(t, -1, 1, -2)
+	SubtractTestCase(t, -1, -1, 0)
 
-	SubstractTestCase(t, 1.23, 1.23, 0)
-	SubstractTestCase(t, 1.23, -1.23, 2.46)
-	SubstractTestCase(t, -1.23, 1.23, -2.46)
-	SubstractTestCase(t, -1.23, -1.23, 0)
+	SubtractTestCase(t, 1.23, 1.23, 0)
+	SubtractTestCase(t, 1.23, -1.23, 2.46)
+	SubtractTestCase(t, -1.23, 1.23, -2.46)
+	SubtractTestCase(t, -1.23, -1.23, 0)
 
-	SubstractTestCase(t, 1/3, -1/3, 2/3)
-	SubstractTestCase(t, math.Pi, -math.Pi, 2*math.Pi)
-	SubstractTestCase(t, math.MaxFloat64, math.MaxFloat64, 0)
+	SubtractTestCase(t, 1/3, -1/3, 2/3)
+	SubtractTestCase(t, math.Pi, -math.Pi, 2*math.Pi)
+	SubtractTestCase(t, math.MaxFloat64, math.MaxFloat64, 0)
 }
 
-func SubstractTestCase(t *testing.T, inputA float64, inputB float64, expectedOutput float64) {
-	output := Substract(inputA, inputB)
+func SubtractTestCase(t *testing.T, inputA float64, inputB float64, expectedOutput float64) {
+	output := Subtract(inputA, inputB)
 	if output != expectedOutput {
-		t.Errorf("Substract(%f, %f) = %f; should be %f", inputA, inputB, output, expectedOutput)
+		t.Errorf("Subtract(%f, %f) = %f; should be %f", inputA, inputB, output, expectedOutput)
 	}
 }
 
