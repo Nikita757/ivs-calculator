@@ -3,6 +3,8 @@ package interpreter
 import (
 	"errors"
 	"ivs-calculator/pkg/mathfunc"
+	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -111,5 +113,115 @@ func InterpretResultTestCase(t *testing.T, tree *TreeNode, expectedOutput float6
 	}
 	if out != expectedOutput {
 		t.Errorf("Interpret(%v) out = %f should be %f", tree, out, expectedOutput)
+	}
+}
+
+//================
+// Interpret tests
+
+func TestInToPost(t *testing.T) {
+	input := strings.Fields("2 + 2")
+	expectedOutput := strings.Fields("2 2 +")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 - 2")
+	expectedOutput = strings.Fields("2 2 -")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 * 2")
+	expectedOutput = strings.Fields("2 2 *")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 / 2")
+	expectedOutput = strings.Fields("2 2 /")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 ^ 2")
+	expectedOutput = strings.Fields("2 2 ^")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 √ 2")
+	expectedOutput = strings.Fields("2 2 √")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 √ 2 ^ 2")
+	expectedOutput = strings.Fields("2 2 2 ^ √")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("( 2 √ 2 ) ^ 2")
+	expectedOutput = strings.Fields("2 2 √ 2 ^")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 % 2")
+	expectedOutput = strings.Fields("2 2 %")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("( 2 + ( 2 ) )")
+	expectedOutput = strings.Fields("2 2 +")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 * 4 + 5 ")
+	expectedOutput = strings.Fields("2 4 * 5 +")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 * 4 / 7 + 5 ")
+	expectedOutput = strings.Fields("2 4 * 7 / 5 +")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 * ( 4 + 5 )")
+	expectedOutput = strings.Fields("2 4 5 + *")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 * ( | 4 + 5 | )")
+	expectedOutput = strings.Fields("2 4 5 + abs *")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 * ( 4 + | ( 5 ) | )")
+	expectedOutput = strings.Fields("2 4 5 abs + *")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 * ( 4 + | - 5 | )")
+	expectedOutput = strings.Fields("2 4 5 m abs + *")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 * ( 4 + | 2 ^ 5 | )")
+	expectedOutput = strings.Fields("2 4 2 5 ^ abs + *")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("+ 2")
+	expectedOutput = strings.Fields("2 p")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("- 2")
+	expectedOutput = strings.Fields("2 m")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("- ( 4 / 2 )")
+	expectedOutput = strings.Fields("4 2 / m")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("+ ( 3 % ( 2 ) )")
+	expectedOutput = strings.Fields("3 2 % p")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 - ( - 2 )")
+	expectedOutput = strings.Fields("2 2 m -")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 - ( + 2 + 8 ! )")
+	expectedOutput = strings.Fields("2 2 p 8 ! + -")
+	inToPostTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 - + 2 + 8 !")
+	expectedOutput = strings.Fields("2 2 p - 8 ! +")
+	inToPostTestCase(t, input, expectedOutput)
+
+}
+
+func inToPostTestCase(t *testing.T, input []string, expectedOutput []string) {
+	output := inToPost(input)
+
+	if !reflect.DeepEqual(output, expectedOutput) {
+		t.Errorf("inToPost(%v) = %v, should be %v", input, output, expectedOutput)
 	}
 }
