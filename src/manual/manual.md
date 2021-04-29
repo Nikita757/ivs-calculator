@@ -40,13 +40,18 @@ HIDEBUILTIN -->
 ## Usage
 
 The input is in standard mathematical form. To get a result, press <kbd>Enter</kbd> or click the <kbd>=</kbd> button. 
+<<<<<<< HEAD
 
 Expressions can be input via the keyboard, using standard symbols for operations (detailed below), or by clicking on the onscreen buttons for the desired number or operation. 
 
+=======
+>>>>>>> 061409962a3ccef7bc7ce78fddcf9c25213afe1d
 Calculations are done in mathematical order - multiplication and division are performed before addition and subtraction. 
 Parentheses have the highest precedence and any expressions within parentheses will be evaluated first.
 
 The result of the calculation as well as the input is persisted in the history for later. The history remains for as long as the window is open. 
+
+The **C/CE** button operates in two ways. By clicking the button normally, it clears the last character. By clicking for a longer period, the whole input is cleared.
 
 The **C/CE** button operates in two ways. By clicking the button normally, it clears the last character. By clicking for a longer period, the whole input is cleared.
 
@@ -97,8 +102,14 @@ Other errors
 
 © Copyright 2021 Tomáš Martykán, Filip Štolfa, Andrei Meleca, Nichita Gutu
 
+<<<<<<< HEAD
 The program is provided under the [GNU General Public License v3.0](https://github.com/martykan/ivs-calculator/blob/main/LICENSE).
 
 Source code is available on [GitHub](https://github.com/martykan/ivs-calculator/).
+=======
+The program is provided under the [GNU General Public License v3.0](https://github.com/martykan/ivs-calculator/blob/main/LICENSE)
+
+Source code is available on [GitHub](https://github.com/martykan/ivs-calculator/)
+>>>>>>> 061409962a3ccef7bc7ce78fddcf9c25213afe1d
 
 Created as a part of IVS (Practical Aspects of Software Design) course at the Faculty of Information Technology at Brno University of Technology.
