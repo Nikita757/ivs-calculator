@@ -421,18 +421,12 @@ func toTreeOper(stack []*TreeNode, token string) []*TreeNode {
 	case "+", "-", "/", "*", "^", "%":
 		l = stack[len(stack)-2]
 		r = stack[len(stack)-1]
-<<<<<<< HEAD
 	case "!", "abs":
 		l = stack[len(stack)-1]
 		r = nil
 	case "√":
 		l = stack[len(stack)-1]
 		r = stack[len(stack)-2]
-=======
-	case "!", "√", "abs":
-		l = stack[len(stack)-1]
-		r = nil
->>>>>>> 061409962a3ccef7bc7ce78fddcf9c25213afe1d
 	}
 
 	if token == "%" {
