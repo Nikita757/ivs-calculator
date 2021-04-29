@@ -14,8 +14,7 @@ func TestSD(t *testing.T) {
 	numbers := []float64{321, 43, 400, 10, 143, 400, 500, 640, 320, 4052}
 
 	total := StandardDeviation(numbers)
-	if total != 1200.121239245806
-	 {
+	if total != 1200.121239245806 {
 		t.Errorf("Result is incorrect")
 	}
 }
