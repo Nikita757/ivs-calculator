@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"io"
 	"log"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -12,11 +13,35 @@ import (
 
 func TestSD(t *testing.T) {
 	numbers := []float64{321, 43, 400, 10, 143, 400, 500, 640, 320, 4052}
+	expectedRes := 1200.121239245806
 
 	total := StandardDeviation(numbers)
-	if total != 1200.121239245806
-	 {
-		t.Errorf("Result is incorrect")
+	if total != expectedRes {
+		t.Errorf("Result is: %.10f, shoudl be: %.10f", total, expectedRes)
+	}
+
+	numbers = []float64{10, 20}
+	expectedRes = 7.0710678119
+
+	total = StandardDeviation(numbers)
+	if math.Abs(total-expectedRes) > math.Pow(10, -10) {
+		t.Errorf("Result is: %.10f, shoudl be: %.10f", total, expectedRes)
+	}
+
+	numbers = []float64{987, 382, 928, 278, 273, 421, 515, 832, 286, 495}
+	expectedRes = 275.2453652854
+
+	total = StandardDeviation(numbers)
+	if math.Abs(total-expectedRes) > math.Pow(10, -10) {
+		t.Errorf("Result is: %.10f, shoudl be: %.10f", total, expectedRes)
+	}
+
+	numbers = []float64{987.2, 382.5, 928, 278, 273, 421, 515, 832, 286, 495}
+	expectedRes = 275.2496969420
+
+	total = StandardDeviation(numbers)
+	if math.Abs(total-expectedRes) > math.Pow(10, -10) {
+		t.Errorf("Result is: %.10f, shoudl be: %.10f", total, expectedRes)
 	}
 }
 
