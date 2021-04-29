@@ -1,7 +1,7 @@
 all: builtin pdf
 
 builtin:
-	pandoc -s --metadata pagetitle="Manual" --css builtin.css -o ../cmd/gui/res/help.html manual.md
+	pandoc --self-contained --metadata pagetitle="Manual" --css builtin.css -o ../cmd/gui/res/help.html manual.md
 
 pdf:
 	grep -v HIDEBUILTIN manual.md | pandoc -s --pdf-engine=xelatex -o manual.pdf
