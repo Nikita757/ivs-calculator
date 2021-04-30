@@ -48,8 +48,6 @@ The result of the calculation as well as the input is persisted in the history f
 
 The **C/CE** button operates in two ways. By clicking the button normally, it clears the last character. By clicking for a longer period, the whole input is cleared.
 
-The **C/CE** button operates in two ways. By clicking the button normally, it clears the last character. By clicking for a longer period, the whole input is cleared.
-
 ## Functions
 
 * Addition
