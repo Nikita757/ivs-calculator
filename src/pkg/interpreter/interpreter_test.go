@@ -140,12 +140,12 @@ func TestInToPost(t *testing.T) {
 	expectedOutput = strings.Fields("2 2 ^")
 	inToPostTestCase(t, input, expectedOutput)
 
-	input = strings.Fields("2 √ 2")
-	expectedOutput = strings.Fields("2 2 √")
+	input = strings.Fields("3 √ 2")
+	expectedOutput = strings.Fields("3 2 √")
 	inToPostTestCase(t, input, expectedOutput)
 
-	input = strings.Fields("2 √ 2 ^ 2")
-	expectedOutput = strings.Fields("2 2 2 ^ √")
+	input = strings.Fields("4 √ 2 ^ 2")
+	expectedOutput = strings.Fields("4 2 2 ^ √")
 	inToPostTestCase(t, input, expectedOutput)
 
 	input = strings.Fields("( 2 √ 2 ) ^ 2")
