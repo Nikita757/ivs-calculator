@@ -2,6 +2,7 @@ package interpreter
 
 import (
 	"errors"
+	"fmt"
 	"ivs-calculator/pkg/mathfunc"
 	"reflect"
 	"strings"
@@ -356,5 +357,111 @@ func toTreeOperTestCase(t *testing.T, tName string, input []*TreeNode, token str
 
 	if !reflect.DeepEqual(output, expectedOutput) {
 		t.Errorf("toTreeOper(%s) is incorrect, token = %s", tName, token)
+	}
+}
+
+func TestPostToTree(t *testing.T) {
+	input := strings.Fields("2 2 +")
+	expectedOutput := &TreeNode{Token{OPERATOR, "+", 0.0},
+		&TreeNode{Token{NUMBER, "2", 2.0}, nil, nil},
+		&TreeNode{Token{NUMBER, "2", 2.0}, nil, nil}}
+	postToTreeTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 2 -")
+	expectedOutput = &TreeNode{Token{OPERATOR, "-", 0.0},
+		&TreeNode{Token{NUMBER, "2", 2.0}, nil, nil},
+		&TreeNode{Token{NUMBER, "2", 2.0}, nil, nil}}
+	postToTreeTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 2 *")
+	expectedOutput = &TreeNode{Token{OPERATOR, "*", 0.0},
+		&TreeNode{Token{NUMBER, "2", 2.0}, nil, nil},
+		&TreeNode{Token{NUMBER, "2", 2.0}, nil, nil}}
+	postToTreeTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 2 /")
+	expectedOutput = &TreeNode{Token{OPERATOR, "/", 0.0},
+		&TreeNode{Token{NUMBER, "2", 2.0}, nil, nil},
+		&TreeNode{Token{NUMBER, "2", 2.0}, nil, nil}}
+	postToTreeTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 2 ^")
+	expectedOutput = &TreeNode{Token{OPERATOR, "pow", 0.0},
+		&TreeNode{Token{NUMBER, "2", 2.0}, nil, nil},
+		&TreeNode{Token{NUMBER, "2", 2.0}, nil, nil}}
+	postToTreeTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("8 2 √")
+	expectedOutput = &TreeNode{Token{OPERATOR, "root", 0.0},
+		&TreeNode{Token{NUMBER, "2", 2.0}, nil, nil},
+		&TreeNode{Token{NUMBER, "8", 8.0}, nil, nil}}
+	postToTreeTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 2 %")
+	expectedOutput = &TreeNode{Token{OPERATOR, "mod", 0.0},
+		&TreeNode{Token{NUMBER, "2", 2.0}, nil, nil},
+		&TreeNode{Token{NUMBER, "2", 2.0}, nil, nil}}
+	postToTreeTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 4 * 5 +")
+	expectedOutput = &TreeNode{Token{OPERATOR, "+", 0.0},
+		&TreeNode{Token{OPERATOR, "*", 0.0},
+			&TreeNode{Token{NUMBER, "2", 2.0}, nil, nil},
+			&TreeNode{Token{NUMBER, "4", 4.0}, nil, nil}},
+		&TreeNode{Token{NUMBER, "5", 5.0}, nil, nil}}
+	postToTreeTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 4 * 7 / 5 +")
+	expectedOutput = &TreeNode{Token{OPERATOR, "+", 0.0},
+		&TreeNode{Token{OPERATOR, "/", 0.0},
+			&TreeNode{Token{OPERATOR, "*", 0.0},
+				&TreeNode{Token{NUMBER, "2", 2.0}, nil, nil},
+				&TreeNode{Token{NUMBER, "4", 4.0}, nil, nil}},
+			&TreeNode{Token{NUMBER, "7", 7.0}, nil, nil}},
+		&TreeNode{Token{NUMBER, "5", 5.0}, nil, nil}}
+	postToTreeTestCase(t, input, expectedOutput)
+
+	input = strings.Fields("2 4 5 + *")
+	expectedOutput = &TreeNode{Token{OPERATOR, "*", 0.0},
+		&TreeNode{Token{NUMBER, "2", 2.0}, nil, nil},
+		&TreeNode{Token{OPERATOR, "+", 0.0},
+			&TreeNode{Token{NUMBER, "4", 4.0}, nil, nil},
+			&TreeNode{Token{NUMBER, "5", 5.0}, nil, nil}}}
+	postToTreeTestCase(t, input, expectedOutput)
+}
+
+func postToTreeTestCase(t *testing.T, input []string, expectedOutput *TreeNode) {
+	output := postToTree(input)
+
+	if !reflect.DeepEqual(output, expectedOutput) {
+		t.Errorf("postToTree(%v) is incorrect", input)
+		fmt.Printf(">>> Got output:\n")
+		printTree(output, 0)
+		fmt.Printf("=== Should be:\n")
+		printTree(expectedOutput, 0)
+	}
+}
+
+func printTree(tree *TreeNode, indentLevel int) {
+	if tree == nil {
+		fmt.Printf("\n")
+		return
+	}
+	if tree.token.tokenType == OPERATOR {
+		fmt.Printf("%*s '%s', %.3f\n", indentLevel, "Token:", tree.token.stringValue, tree.token.floatValue)
+		fmt.Printf("%*slN: ", indentLevel, "")
+		printTree(tree.leftNode, indentLevel+2)
+		fmt.Printf("%*srN: ", indentLevel, "")
+		printTree(tree.rightNode, indentLevel+2)
+	} else if tree.token.tokenType == NUMBER {
+		fmt.Printf("%*s '%s', %.3f\n", indentLevel, "Token:", tree.token.stringValue, tree.token.floatValue)
+		if tree.leftNode != nil {
+			fmt.Printf("%*slN: ", indentLevel, "")
+			printTree(tree.leftNode, indentLevel+2)
+		}
+		if tree.rightNode != nil {
+			fmt.Printf("%*srN: ", indentLevel, "")
+			printTree(tree.rightNode, indentLevel+2)
+		}
 	}
 }
