@@ -26,6 +26,8 @@ pack: clean
 	cp -R ../ $(PACKDIR)/repo/
 	$(MAKE) doc
 	cp -R docs/_build/html/ $(PACKDIR)/doc/
+	$(MAKE) manual
+	cp manual/manual.pdf $(PACKDIR)/
 	$(MAKE) debian
 	mkdir $(PACKDIR)/install/
 	cp ivs-calculator.deb $(PACKDIR)/install/
