@@ -113,3 +113,235 @@ func InterpretResultTestCase(t *testing.T, tree *TreeNode, expectedOutput float6
 		t.Errorf("Interpret(%v) out = %f should be %f", tree, out, expectedOutput)
 	}
 }
+
+func TestToSlice(t *testing.T) {
+	in := "1010+10/5"
+	expOut := []string{"1010", "+", "10", "/", "5"}
+	
+	out, err := toSlice(in);
+	if (len(err) > 0) {
+		t.Errorf("Error given should be no error")
+	} else {
+		if (len(expOut) == len(out)) {
+			for i := 0; i < len(expOut); i++ {
+				if (expOut[i] != out[i]) {
+					t.Errorf("Sliced out '%s' should be '%s'", out[i], expOut[i])
+				}
+			}
+		} else {
+			t.Errorf("Length is %d should be %d", len(out), len(expOut))
+		}
+	}
+
+
+	in = "(50+(30/10)*5-2^5+5.5)"
+	expOut = []string{"(", "50", "+", "(", "30", "/", "10", ")", "*", "5", "-", "2", "^", "5", "+", "5.5", ")"}
+
+	out, err = toSlice(in);
+	if (len(err) > 0) {
+		t.Errorf("Error given should be no error")
+	} else {
+		if (len(expOut) == len(out)) {
+			for i := 0; i < len(expOut); i++ {
+				if (expOut[i] != out[i]) {
+					t.Errorf("Sliced out '%s' should be '%s'", out[i], expOut[i])
+				}
+			}
+		} else {
+			t.Errorf("Length is %d should be %d", len(out), len(expOut))
+		}
+	}
+
+	in = "√(5^|-5|-1)+5%5"
+	expOut = []string{"2", "√", "(", "5", "^", "-", "5", "|", "-", "1", ")", "+", "5", "%", "5"}
+	
+	out, _ = toSlice(in);
+
+	if (len(expOut) == len(out)) {
+		for i := 0; i < len(expOut); i++ {
+			if (expOut[i] != out[i]) {
+				t.Errorf("Sliced out '%s' should be '%s'", out[i], expOut[i])
+			}
+		}
+	} else {
+		t.Errorf("Length is %d should be %d", len(out), len(expOut))
+	}
+
+	in = ""
+	out, _ = toSlice(in);
+
+	if (out != nil) {
+		t.Errorf("Slice should be nil")
+	}
+
+	in = ")"
+	out, err = toSlice(in);
+
+	if (len(err) <= 0) {
+		t.Errorf("No error given should be error")
+	}
+
+	in = "3√9"
+	expOut = []string{"3", "√", "9"}
+	out, err = toSlice(in);
+
+	if (len(err) > 0) {
+		t.Errorf("Error given should be no error")
+	} else {
+		if (len(expOut) == len(out)) {
+			for i := 0; i < len(expOut); i++ {
+				if (expOut[i] != out[i]) {
+					t.Errorf("Sliced out '%s' should be '%s'", out[i], expOut[i])
+				}
+			}
+		} else {
+			t.Errorf("Length is %d should be %d", len(out), len(expOut))
+		}
+	}
+
+	in = "(√16)"
+	expOut = []string{"(", "2", "√", "16", ")"}
+	out, err = toSlice(in);
+
+	if (len(err) > 0) {
+		t.Errorf("Error given should be no error")
+	} else {
+		if (len(expOut) == len(out)) {
+			for i := 0; i < len(expOut); i++ {
+				if (expOut[i] != out[i]) {
+					t.Errorf("Sliced out '%s' should be '%s'", out[i], expOut[i])
+				}
+			}
+		} else {
+			t.Errorf("Length is %d should be %d", len(out), len(expOut))
+		}
+	}
+
+	in = "(^"
+	out, err = toSlice(in);
+
+	if (len(err) <= 0) {
+		t.Errorf("No error given should be error")
+	}
+
+	in = "--5"
+	expOut = []string{"+", "5"}
+	out, err = toSlice(in);
+
+	if (len(err) > 0) {
+		t.Errorf("Error given should be no error")
+	} else {
+		if (len(expOut) == len(out)) {
+			for i := 0; i < len(expOut); i++ {
+				if (expOut[i] != out[i]) {
+					t.Errorf("Sliced out '%s' should be '%s'", out[i], expOut[i])
+				}
+			}
+		} else {
+			t.Errorf("Length is %d should be %d", len(out), len(expOut))
+		}
+	}
+
+	in = "+-5"
+	expOut = []string{"-", "5"}
+	out, err = toSlice(in);
+
+	if (len(err) > 0) {
+		t.Errorf("Error given should be no error")
+	} else {
+		if (len(expOut) == len(out)) {
+			for i := 0; i < len(expOut); i++ {
+				if (expOut[i] != out[i]) {
+					t.Errorf("Sliced out '%s' should be '%s'", out[i], expOut[i])
+				}
+			}
+		} else {
+			t.Errorf("Length is %d should be %d", len(out), len(expOut))
+		}
+	}
+
+	in = "++5"
+	expOut = []string{"+", "5"}
+	out, err = toSlice(in);
+
+	if (len(err) > 0) {
+		t.Errorf("Error given should be no error")
+	} else {
+		if (len(expOut) == len(out)) {
+			for i := 0; i < len(expOut); i++ {
+				if (expOut[i] != out[i]) {
+					t.Errorf("Sliced out '%s' should be '%s'", out[i], expOut[i])
+				}
+			}
+		} else {
+			t.Errorf("Length is %d should be %d", len(out), len(expOut))
+		}
+	}
+
+	in = "-+5"
+	expOut = []string{"-", "5"}
+	out, err = toSlice(in);
+
+	if (len(err) > 0) {
+		t.Errorf("Error given should be no error")
+	} else {
+		if (len(expOut) == len(out)) {
+			for i := 0; i < len(expOut); i++ {
+				if (expOut[i] != out[i]) {
+					t.Errorf("Sliced out '%s' should be '%s'", out[i], expOut[i])
+				}
+			}
+		} else {
+			t.Errorf("Length is %d should be %d", len(out), len(expOut))
+		}
+	}
+
+	in = "1*%5"
+	_, err = toSlice(in);
+
+	if (len(err) <= 0) {
+		t.Errorf("No error given should be error")
+	}
+
+	in = "5|||"
+	_, err = toSlice(in);
+
+	if (len(err) <= 0) {
+		t.Errorf("No error given should be error")
+	}
+
+	in = "()("
+	_, err = toSlice(in);
+
+	if (len(err) <= 0) {
+		t.Errorf("No error given should be error")
+	}
+
+	in = "(()"
+	_, err = toSlice(in);
+
+	if (len(err) <= 0) {
+		t.Errorf("No error given should be error")
+	}
+
+	in = "(*. 5"
+	_, err = toSlice(in);
+
+	if (len(err) <= 0) {
+		t.Errorf("No error given should be error")
+	}
+
+	in = "5..5"
+	_, err = toSlice(in);
+
+	if (len(err) <= 0) {
+		t.Errorf("No error given should be error")
+	}
+
+	in = "5..5"
+	_, err = toSlice(in);
+
+	if (len(err) <= 0) {
+		t.Errorf("No error given should be error")
+	}
+}
