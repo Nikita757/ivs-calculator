@@ -25,7 +25,7 @@ func StandardDeviation(numbers []float64) float64 {
 		pow, _ := mathfunc.Power(numbers[i], 2)
 		sum1 = mathfunc.Add(sum1, pow)
 	}
-	res = mathfunc.Substract(sum1, sum2)
+	res = mathfunc.Subtract(sum1, sum2)
 	res, _ = mathfunc.Divide(res, float64(num_len-1))
 	res, _ = mathfunc.Root(res, 2)
 	return res
