@@ -31,7 +31,7 @@ make debian
 To build the user manual:
 
 ```
-make maual
+make manual
 ```
 
 To install manually after building:

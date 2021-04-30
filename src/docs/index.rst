@@ -1,9 +1,12 @@
-Welcome to IVS Calculator's documentation!
-==========================================
+IVS Calculator code documentation
+=================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
+
+   autoapi/mathfunc/index
+   autoapi/interpreter/index
 
 
 

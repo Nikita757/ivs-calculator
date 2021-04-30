@@ -1,6 +1,5 @@
 project = 'IVS Calculator'
-copyright = '2021, FIT VUT Team'
-author = 'FIT VUT Team'
+copyright = '2021 Tomáš Martykán, Filip Štolfa, Andrei Meleca, Nichita Gutu'
 
 # -- General configuration
 
@@ -13,6 +12,10 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 autoapi_type = 'go'
 
 autoapi_dirs = ['../pkg/mathfunc', '../pkg/interpreter']
+
+autoapi_options = ['members', 'undoc-members', 'private-members', 'show-inheritance', 'show-module-summary', 'special-members', 'imported-members']
+
+autoapi_member_order = 'groupwise'
 
 def prepare_docstring(string):
   print(string)
@@ -36,6 +39,8 @@ def autoapi_prepare_jinja_env(jinja_env):
   jinja_env.filters["format_docstring"] = prepare_docstring
 
 autoapi_template_dir = './_templates'
+
+autoapi_add_toctree_entry = False
 
 # -- Options for HTML output
 
